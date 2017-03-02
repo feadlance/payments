@@ -8,7 +8,7 @@
 
 Composer ile:
 
-    $ composer require weblebby/payments 1.0
+    $ composer require weblebby/payments
 
 Manuel:
 
