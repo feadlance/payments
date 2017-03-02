@@ -1,0 +1,13 @@
+{
+    "name": "weblebby/payments",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Davut Kember",
+            "email": "davutkmbr@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {}
+}
