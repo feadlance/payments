@@ -77,7 +77,6 @@ class BatigamePayment
 	/**
 	 * Handle received request.
 	 *
-	 * @param function $callback
 	 * @return array
 	 */
 	public function handle()
