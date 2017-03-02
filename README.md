@@ -30,10 +30,12 @@ require __DIR__ . '/vendor/autoload.php';
 // Manuel:
 # Dosyaları sayfaya dahil edin.
 
-$id = '{BATIHOST_USER_ID}';
-$secret = '{BATIHOST_GUVENLIK_KODU}';
+$config = [
+  'id' => '{BATIHOST_USER_ID}',
+  'secret' => '{BATIHOST_GUVENLIK_KODU}'
+];
 
-$payment = new BatigamePayment($id, $secret);
+$payment = new BatigamePayment($config);
 ```
 
 HTML İçin Form Oluşturmak
