@@ -111,16 +111,20 @@ class BatigamePayment
 	/**
 	 * Check same trans id.
 	 *
-	 * @param int $trans_id
+	 * @param mixed $trans_ids
 	 * @return boolean 
 	 */
-	public function checkTrans($trans_id)
+	public function checkTrans($trans_ids = [])
 	{
 		if ( isset($this->post['trans_id']) !== true ) {
 			return false;
 		}
 
-		return $this->post['trans_id'] != $trans_id;
+		if ( is_array($trans_ids) !== true ) {
+			$trans_ids = [$trans_ids];
+		}
+
+		return in_array($this->post['trans_id'], $trans_ids) !== true;
 	}
 
 	/**
