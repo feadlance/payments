@@ -12,6 +12,13 @@ class BatigamePayment
 	protected $config = [];
 
 	/**
+	 * Batıhost Post Data.
+	 *
+	 * @var array
+	 */
+	protected $post = [];
+
+	/**
 	 * HtmlForm Config
 	 *
 	 * @var object
@@ -96,7 +103,24 @@ class BatigamePayment
 			throw new PaymentException("Güvenlik kodu uyuşmuyor.", 1);
 		}
 
+		$this->post = $post;
+
 		return $post;
+	}
+
+	/**
+	 * Check same trans id.
+	 *
+	 * @param int $trans_id
+	 * @return boolean 
+	 */
+	public function checkTrans($trans_id)
+	{
+		if ( isset($this->post['trans_id']) !== true ) {
+			return false;
+		}
+
+		return $this->post['trans_id'] != $trans_id;
 	}
 
 	/**
