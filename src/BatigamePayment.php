@@ -2,7 +2,7 @@
 
 namespace Weblebby\Payments;
 
-class BatigamePayment
+class BatigamePayment extends PaymentParent
 {
 	/**
 	 * Batıhost Config.
