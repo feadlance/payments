@@ -5,20 +5,6 @@ namespace Weblebby\Payments;
 class BatigamePayment extends PaymentParent
 {
 	/**
-	 * Batıhost Config.
-	 *
-	 * @var array
-	 */
-	protected $config = [];
-
-	/**
-	 * Batıhost Post Data.
-	 *
-	 * @var array
-	 */
-	protected $post = [];
-
-	/**
 	 * HtmlForm Config
 	 *
 	 * @var object
@@ -35,6 +21,7 @@ class BatigamePayment extends PaymentParent
 	{
 		$this->config['id'] = $config['id'];
 		$this->config['secret'] = $config['secret'];
+		$this->config['api_url'] = $config['api_url'];
 
 		$this->loadHtmlFormDefaultConfig();
 	}
@@ -44,8 +31,12 @@ class BatigamePayment extends PaymentParent
 	 *
 	 * @return string
 	 */
-	public function openHtmlForm()
+	public function openHtmlForm($url = null)
 	{
+		if ( is_null($url) ) {
+			$url = $this->config['api_url'];
+		}
+
 		$inputs = [
 			'username' => 'oyuncu',
 			'success_url' => 'odemeolduurl',
@@ -66,7 +57,7 @@ class BatigamePayment extends PaymentParent
 			$inputHtml[] = '<input type="hidden" name="' . $inputs[$key] . '" value="' . $input . '">';
 		}
 
-		return '<form action="http://batigame.com/vipgateway/viprec.php" method="post" autocomplete="off">
+		return '<form action="' . $url . '" method="post" autocomplete="off">
 	' . ( implode("\n", $inputHtml) ) . '
 	<input type="hidden" name="batihostid" value="' . $this->config['id'] . '">';
 	}
@@ -116,15 +107,21 @@ class BatigamePayment extends PaymentParent
 	 */
 	public function checkTrans($trans_ids = [])
 	{
-		if ( isset($this->post['trans_id']) !== true ) {
+		return $this->checkTransParent($trans_ids, $this->post);
+	}
+
+	/**
+	 * Get request fields.
+	 *
+	 * @return array|boolean
+	 */
+	public function fields()
+	{
+		if ( isset($this->fields) !== true ) {
 			return false;
 		}
-
-		if ( is_array($trans_ids) !== true ) {
-			$trans_ids = [$trans_ids];
-		}
-
-		return in_array($this->post['trans_id'], $trans_ids) !== true;
+		
+		return $this->fieldsParent($this->fields);
 	}
 
 	/**
