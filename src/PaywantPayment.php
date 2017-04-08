@@ -1,9 +1,6 @@
 <?php
 
-namespace App\Helpers\Payments;
-
-use Weblebby\Payments\PaymentParent;
-use Weblebby\Payments\PaymentException;
+namespace Weblebby\Payments;
 
 class PaywantPayment extends PaymentParent
 {
