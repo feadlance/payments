@@ -23,7 +23,7 @@ class PaywantPayment extends PaymentParent
 		}
 
 		$rules = [
-			'username' => 'required|max:255|exists:users',
+			'username' => 'required|max:191|exists:users',
 			'credit' => 'required|numeric'
 		];
 
@@ -64,21 +64,20 @@ class PaywantPayment extends PaymentParent
 
 		$this->post = [
 			'trans_id' => $_POST['SiparisID'],
-			'extra_data' => $_POST['ExtraData'],
-			'username' => $_POST['UserID'],
-			'return_data' => $_POST['ReturnData'],
+			'credit' => $_POST['ExtraData'],
+			'user_id' => $_POST['UserID'],
+			'username' => $_POST['ReturnData'],
 			'status' => $_POST['Status'],
 			'payment_channel' => $_POST['OdemeKanali'],
 			'payment_price' => $_POST['OdemeTutari'],
-			'credit' => $_POST['OdemeTutari'],
 			'gain' => $_POST['NetKazanc']
 		];
 
 		$checkHash = base64_encode(hash_hmac('sha256', implode('|', [
 			$this->post['trans_id'],
-			$this->post['extra_data'],
+			$this->post['credit'],
+			$this->post['user_id'],
 			$this->post['username'],
-			$this->post['return_data'],
 			$this->post['status'],
 			$this->post['payment_channel'],
 			$this->post['payment_price'],
@@ -90,10 +89,10 @@ class PaywantPayment extends PaymentParent
 		}
 
 		if ( $this->post['status'] != 100 ) {
-			return $post;
+			throw new PaymentException("İşlem başarısız oldu, lütfen tekrar deneyin.", 1);
 		}
 
-		return $post;
+		return $this->post;
 	}
 
 	/**
@@ -110,7 +109,7 @@ class PaywantPayment extends PaymentParent
 		$generateHash = base64_encode(hash_hmac('sha256', $post['username'] . '|' . $post['email'] . '|' . $post['user_id'] . $this->config['key'], $this->config['secret'], true));
 		
 		$productData = [
-			'name' =>  $post['credit'] . ' Türk Lirası',
+			'name' => $post['credit'] . ' Türk Lirası',
 			'amount' => $post['credit'] * 100,
 			'extraData' => $post['credit'],
 			'paymentChannel' => '1,2,3',
@@ -127,6 +126,8 @@ class PaywantPayment extends PaymentParent
 			'proApi' => true,
 			'productData' => $productData
 		];
+
+		info($postData);
 		
 		$curl = curl_init();
 
